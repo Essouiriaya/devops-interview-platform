@@ -1,0 +1,27 @@
+# Dépendances Python du backend DevSecOps Interview Platform
+# Versions épinglées pour obtenir le même environnement sur les deux ordinateurs.
+# Environnement recommandé : Python 3.12.x
+
+# API REST
+fastapi==0.115.8
+uvicorn[standard]==0.34.0
+
+# Configuration et validation
+pydantic==2.10.6
+pydantic-settings==2.7.1
+python-dotenv==1.0.1
+
+# Base de données PostgreSQL
+SQLAlchemy==2.0.38
+psycopg[binary]==3.2.5
+
+# RAG et recherche vectorielle
+langchain==0.3.19
+langchain-community==0.3.18
+langchain-qdrant==0.2.0
+qdrant-client==1.13.2
+sentence-transformers==3.4.1
+
+# Tests
+pytest==8.3.4
+httpx==0.28.1
