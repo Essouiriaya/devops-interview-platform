@@ -22,6 +22,17 @@ services:
     volumes:
       - qdrantdata:/qdrant/storage
 
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: http://localhost:8000/api
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
   backend:
     build: ./backend
     environment:
