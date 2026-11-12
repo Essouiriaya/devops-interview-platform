@@ -1,7 +1,3 @@
-# Dépendances Python du backend DevSecOps Interview Platform
-# Versions épinglées pour obtenir le même environnement sur les deux ordinateurs.
-# Environnement recommandé : Python 3.12.x
-
 # API REST
 fastapi==0.115.8
 uvicorn[standard]==0.34.0
