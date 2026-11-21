@@ -27,12 +27,11 @@ pipeline {
         // 3. Execution des tests Backend
         stage('Test') {
             steps {
-                echo 'Execution des tests Backend'
+                echo 'Execution des tests Backend dans le conteneur Docker'
 
-                dir('backend') {
-                    sh 'python3 -m pip install -r requirements.txt'
-                    sh 'python3 -m pytest -v'
-                }
+                sh '''
+                    docker compose run --rm backend python -m pytest -v
+                '''
             }
         }
     }
