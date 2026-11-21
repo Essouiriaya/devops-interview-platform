@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -7,6 +8,7 @@ pipeline {
 
     stages {
 
+        // 1. Recuperation du code source
         stage('Checkout') {
             steps {
                 echo 'Recuperation du code source'
@@ -14,20 +16,22 @@ pipeline {
             }
         }
 
+        // 2. Construction des images Docker
         stage('Build') {
             steps {
                 echo 'Construction des images Docker'
-                bat 'docker compose build'
+                sh 'docker compose build'
             }
         }
 
+        // 3. Execution des tests Backend
         stage('Test') {
             steps {
                 echo 'Execution des tests Backend'
 
                 dir('backend') {
-                    bat 'python -m pip install -r requirements.txt'
-                    bat 'python -m pytest -v'
+                    sh 'python3 -m pip install -r requirements.txt'
+                    sh 'python3 -m pytest -v'
                 }
             }
         }
