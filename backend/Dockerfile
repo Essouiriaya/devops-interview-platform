@@ -3,17 +3,29 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
+# Install dependencies
 COPY requirements.txt .
 
-# Installer PyTorch en version CPU uniquement
-RUN pip install --no-cache-dir \
+RUN pip install --no-cache-dir --retries 10 --timeout 1000 \
     torch==2.6.0 \
     --index-url https://download.pytorch.org/whl/cpu
 
-# Installer les dépendances du projet
-RUN pip install --no-cache-dir --timeout=300 -r requirements.txt
+RUN pip install --no-cache-dir --retries 10 --timeout 1000 \
+    -r requirements.txt
 
-COPY . .
+# Create a non-root user
+RUN groupadd --system appgroup && \
+    useradd --system --gid appgroup --create-home appuser
+
+# Copy only required application files
+COPY --chown=appuser:appgroup app/ ./app/
+COPY --chown=appuser:appgroup tests/ ./tests/
+
+# Set permissions
+RUN chown appuser:appgroup /app
+
+# Run as non-root user
+USER appuser
 
 EXPOSE 8000
 
