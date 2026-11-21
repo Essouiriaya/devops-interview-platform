@@ -68,11 +68,21 @@ def add_answer(db: Session | None, session_id: int, question_id: int | None,
             db.add(q)
             db.flush()
             question_id = q.id
-        a = Answer(question_id=question_id, content=answer_text,
-                 score=evaluation["score"], feedback=evaluation["feedback"])
+
+        a = Answer(
+            question_id=question_id,
+            content=answer_text,
+            score=evaluation["score"],
+            feedback=evaluation["feedback"]
+        )
         db.add(a)
+
+        # Enregistrer la réponse avant de calculer la moyenne
+        db.flush()
+
         _update_session_score_db(db, session_id)
         db.commit()
+        
         return {"id": a.id, "score": a.score}
     if question_id is None or question_id not in _mem["questions"]:
         qid = _next_id()

@@ -5,7 +5,13 @@ WORKDIR /app
 
 COPY requirements.txt .
 
-RUN pip install --no-cache-dir -r requirements.txt
+# Installer PyTorch en version CPU uniquement
+RUN pip install --no-cache-dir \
+    torch==2.6.0 \
+    --index-url https://download.pytorch.org/whl/cpu
+
+# Installer les dépendances du projet
+RUN pip install --no-cache-dir --timeout=300 -r requirements.txt
 
 COPY . .
 
