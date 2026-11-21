@@ -34,6 +34,19 @@ pipeline {
                 '''
             }
         }
+
+        // 4. Analyse de la qualite du code
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'SonarScanner'
+
+                    withSonarQubeEnv('SonarQube') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
+            }
+        }
     }
 
     post {
