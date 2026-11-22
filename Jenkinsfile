@@ -59,6 +59,24 @@ pipeline {
                 '''
             }
         }
+
+        // 6. Analyse des vulnerabilites Docker
+        stage('Trivy Scan') {
+            steps {
+                echo 'Analyse des vulnerabilites de l image Docker Backend'
+
+                sh '''
+                    docker run --rm \
+                        -v /var/run/docker.sock:/var/run/docker.sock \
+                        -v trivy-cache:/root/.cache/ \
+                        aquasec/trivy:latest image \
+                        --scanners vuln \
+                        --severity HIGH,CRITICAL \
+                        --exit-code 0 \
+                        devops-interview-platform-backend:latest
+                '''
+            }
+        }
     }
 
     post {
