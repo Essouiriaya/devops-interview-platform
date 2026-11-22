@@ -47,6 +47,18 @@ pipeline {
                 }
             }
         }
+
+
+        // 5. Detection des secrets
+        stage('Gitleaks Scan') {
+            steps {
+                echo 'Detection des secrets dans Git history'
+
+                sh '''
+                    gitleaks git . --redact --exit-code 1
+                '''
+            }
+        }
     }
 
     post {
