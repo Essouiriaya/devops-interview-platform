@@ -77,6 +77,41 @@ pipeline {
                 '''
             }
         }
+
+
+        // 7. Publication des images Docker sur GHCR
+        stage('Push to GHCR') {
+            steps {
+                echo 'Publication des images Docker sur GitHub Container Registry'
+
+                withCredentials([string(
+                    credentialsId: 'jenkins-ghcr-token',
+                    variable: 'GHCR_TOKEN'
+                )]) {
+                    sh '''
+                        set +x
+                        set -e
+
+                        trap 'docker logout ghcr.io >/dev/null 2>&1 || true' EXIT
+
+                        echo "$GHCR_TOKEN" | docker login ghcr.io \
+                            --username Essouiriaya \
+                            --password-stdin
+
+                        docker tag devops-interview-platform-backend:latest \
+                            ghcr.io/essouiriaya/devops-interview-platform-backend:latest
+
+                        docker tag devops-interview-platform-frontend:latest \
+                            ghcr.io/essouiriaya/devops-interview-platform-frontend:latest
+
+                        docker push ghcr.io/essouiriaya/devops-interview-platform-backend:latest
+
+                        docker push ghcr.io/essouiriaya/devops-interview-platform-frontend:latest
+                    '''
+                }
+            }
+        }
+
     }
 
     post {
